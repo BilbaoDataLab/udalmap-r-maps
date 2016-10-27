@@ -1,0 +1,220 @@
+Introducción y Puesta en Marcha en R
+========================================================
+author: Asier Goikoetxea eta Gorka Kobeaga
+date: 2016/10/27
+autosize: true
+
+Contenidos de la Sesión
+========================================================
+
+- Presentación sobre R y algunas nociones básicas
+    - R y R studio
+    - Operaciones y Estadística Básica
+    - Gráficos
+    - Librerías (paquetes), funciones, recursos para seguir adelante...
+- Taller práctico con datos públicos
+
+Introducción
+========================================================
+- Qué es R
+- Porqué es importante
+    - Libre, gratuito, multi-plataforma
+    - Comunidad muy activa y subiendo mucho en popularidad [stackoverflow](http://blog.revolutionanalytics.com/2015/07/in-celebration-of-100000-r-questions-on-stackoverflow.html) [stackoverflow2](http://blog.revolutionanalytics.com/2015/07/the-most-popular-programming-languages-on-stackoverflow.html) y [github](http://pypl.github.io/PYPL.html) 
+    - Ecosistema de R: crear documentos con Latex/Markdown, informes o presentaciones pdf/html
+- Qué limitaciones tiene: uso de memoria.
+
+Presentación basada en el libro [YaRrr! Pirate's guide to R](http://nathanieldphillips.com/thepiratesguidetor/)
+
+R y R studio
+========================================================
+
+CRAN y Rstudio.com
+![RStudio](rstudio.png)
+
+Programación
+========================================================
+
+Programar es un proceso artesanal:
+- Hay infinitas formas correctas de escribir un mismo programa
+- Criterios:
+    - utilizar los menos codigos posibles
+    - optimizar la velocidad
+    - optimizar el uso de memoria o CPU...
+    - que el codigo se entienda lo mejor posible
+
+Instalar y Trabajar con Paquetes
+========================================================
+
+- R Base
+- Instalar paquetes o extensiones
+    - CRAN, GitHub
+
+```{r}
+# ******* instalar el paquete YaRrr! *******
+#install.packages("devtools"); library(devtools)
+#install.github("ndphillips/yarrr", build_vignette=TRUE)
+library(yarrr)
+```
+
+Leer Datos
+=========================================================
+- Basico: read.csv / readlines / read.table / readRDS 
+- Librerías: excel / hoja de calculo GDrive / SQL / Leer de la web
+
+```{r}
+palabras <- read.csv("unigram_ws.csv")
+head(palabras)
+```
+
+Explorar Nuestro Dataset
+=========================================================
+
+```{r}
+nrow(pirates)
+names(pirates)
+```
+
+=========================================================
+
+Head / Tail
+```{r}
+head(pirates[, 1:6])
+```
+
+Operaciones: coger una muestra de Datos
+=========================================================
+Filtrar por Columnas [ , X] / Filtrar por Filas [X, ]
+Filtrar por condiciones lógicas: subset()
+Asignar valor a una variable '<-' / 'alt -'
+```{r}
+muestra <- pirates[5:15 ,1:3] 
+subset(muestra, sex=="male")
+```
+
+Operaciones: Condiciones logicas
+=========================================================
+
+Comparar dos variables u objetos:
+
+```{r}
+12==2 #12!=2
+12>=2
+12<2
+```
+
+Operaciones: Condiciones logicas
+=========================================================
+
+%in%
+
+```{r}
+laborable <- c("lunes", "martes", "miercoles","jueves", "viernes")
+hoy <- "jueves"
+hoy%in%laborable
+```
+
+Operaciones: Estadística Descriptiva
+=========================================================
+
+```{r}
+summary(pirates$age)
+table(pirates$sex)
+```
+
+Operaciones: Tablas
+=========================================================
+
+```{r}
+table(pirates$sex, pirates$sword.type)
+```
+
+Operaciones: Estadística Descriptiva
+=========================================================
+mean, median, range, var, sd, iqr, max, min
+```{r}
+aggregate(age ~ sex, data = pirates, FUN = mean)
+```
+
+Operaciones: Estadística Descriptiva
+=========================================================
+
+```{r}
+aggregate(age ~ sex + sword.type, data = pirates, FUN = mean)
+```
+
+Gráficos: Histograma
+=========================================================
+
+```{r}
+hist(x=pirates$tattoos, main="Frequencia del número de Tatuajes de los Piratas", xlab = "Número de Tatuajes", ylab = "Frequencia", col="skyblue", border="white")
+```
+
+Diagrama de Cajas (BoxPlot)
+=========================================================
+
+```{r}
+boxplot(age ~ sword.type, data= pirates, col= c("red", "blue", "green", "orange"))
+```
+
+Diagrama de Dispersión (ScatterPlot)
+=========================================================
+
+```{r}
+plot(x= pirates$weight, y= pirates$height, main= "Relación entre Peso y la Altura de los Piratas", xlab= "Peso (kg)", ylab = "Altura (cm)", pch=16, col=gray(.0,.4))
+linea <- lm(height ~ weight, data = pirates); abline(linea, col="blue", lwd=3)
+```
+
+Gráficos Avanzados
+=========================================================
+- ggplot2
+- gráficos interactivos:
+    - Manipulate, rCharts, GoogleVis
+- mapas:
+    - Leaflet, google maps
+
+Otros gráficos
+=========================================================
+
+```{r}
+library(circlize)
+chordDiagram(matrix(sample(10), nrow = 2,ncol = 5))
+```
+
+Otros gráficos
+=========================================================
+
+```{r}
+# Create a pirateplot showing the distribution of ages
+pirateplot(formula = age ~ sword.type,data = pirates, main = "Pirateplot of ages by favorite sword")
+```
+
+Loops
+=========================================================
+- Repetir un trozo de codigo varias veces
+```{r}
+trabajo <- 0
+for (dia in laborable) {
+    trabajo <- 8 + trabajo
+    mensaje <- paste0(dia, ": suma de horas trabajadas => ", trabajo)
+    print(mensaje)
+}
+```
+
+GSUB
+=========================================================
+- Sustituir caracteres por otros en un texto: literal / [regex](http://regexr.com/)
+
+```{r}
+gsub("trabajadas", "programando", mensaje)
+```
+```{r}
+gsub("[aeiou]", "_", mensaje)
+```
+
+Recursos para seguir aprendiendo
+=========================================================
+- [Yarrr! Pirate's guide to R](http://nathanieldphillips.com/thepiratesguidetor/)
+- [R Programing for data science](https://leanpub.com/rprogramming)
+- [R-Bloggers](https://www.r-bloggers.com/)
+
+y mucho más...
