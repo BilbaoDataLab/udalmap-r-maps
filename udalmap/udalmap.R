@@ -87,12 +87,15 @@ col_eur <- grep("€",names(udalmap))
 col_ind <- grep("indizea",names(udalmap))
 col_m2 <- grep("azalera",names(udalmap))
 
-dir.exists("out")
-  dir.create("out",recursive=T)
+if (!dir.exists("out"))
+  dir.create("out")
 
-#i <- 128 #TODO:Error because of a NA column
 for (i in 1:length(udalmap))
 { ## Plot each indicators colour map (by years) to out dir
+
+#i <- 128 #TODO:Error because of NA columns
+if (i!=128)
+{
 
   ## Get indicator id and name
   indicator.id <- strsplit(names(udalmap)[[i]],":")[[1]][1]
@@ -216,4 +219,5 @@ for (i in 1:length(udalmap))
   filename <- paste("out/", indicator.id,".png",sep="")
 
   ggsave(filename, gg, dpi=600)
+}
 }
