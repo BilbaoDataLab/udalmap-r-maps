@@ -80,15 +80,15 @@ sprintf("%2.1f-%s", per_scale_breaks, percent(lead(per_scale_breaks/100))) %>%
   head(-1) -> breaks_labels
 
 # Colour pallet
-colour_pal <- c("#eaecd8", "#d6dab3", "#c2c98b", "#949D48", "#6e7537", "#494E24", "#BB792A", "#7C441C", "#ffffff")
+colour_pal <- c("#eaecd8", "#d6dab3", "#c2c98b", "#949D48", "#6e7537", "#494E24", "#BB792A", "#7C441C")
 
 col_perc <- sort(c(grep("%",names(udalmap)),grep("‰",names(udalmap))))
 col_eur <- grep("€",names(udalmap))
 col_ind <- grep("indizea",names(udalmap))
 col_m2 <- grep("azalera",names(udalmap))
 
-if (!dir.exists("out"))
-  dir.create("out")
+if (!dir.exists("eae"))
+  dir.create("eae")
 
 for (i in 1:length(udalmap))
 { ## Plot each indicators colour map (by years) to out dir
@@ -111,6 +111,9 @@ if (i!=128)
       mutate(`%`=cut(value,
         c(0, 2.5, 5, 10, 25, 50, 75, 80, 100),
         breaks_labels))-> indicator_dat
+
+      colour_pal.tmp <- colour_pal[breaks_labels %in% indicator_dat$'%']
+
   } else if (i %in% col_ind)
   { as.data.frame(udalmap[[i]]) %>%
       gather(year, value, starts_with("2")) %>%
@@ -125,6 +128,8 @@ if (i!=128)
       indicator_dat %>% mutate(Indizea=cut(value,
         cont_scale_breaks,
         value_breaks_labels))-> indicator_dat
+
+      colour_pal.tmp <- colour_pal[4:8]
 
   } else if (i %in% col_m2)
   { as.data.frame(udalmap[[i]]) %>%
@@ -141,6 +146,8 @@ if (i!=128)
         m2_scale_breaks,
         m2_breaks_labels))-> indicator_dat
 
+      colour_pal.tmp <- colour_pal[5:(4+length(m2_breaks_labels))]
+
   } else
   { as.data.frame(udalmap[[i]]) %>%
       gather(year, value, starts_with("2")) %>%
@@ -150,6 +157,8 @@ if (i!=128)
 
       sprintf("%s-%s", cont_scale_breaks, lead(cont_scale_breaks)) %>%
         head(-1) -> value_breaks_labels
+
+      colour_pal.tmp <- colour_pal[5:(4+length(value_breaks_labels))]
 
       if (i %in% col_eur)
       { indicator_dat %>% mutate("€"=cut(value,
@@ -194,7 +203,7 @@ if (i!=128)
                     color="#7f7f7f", size=0.15)
   }
 
-  gg <- gg + scale_fill_manual(values=colour_pal)
+  gg <- gg + scale_fill_manual(values=colour_pal.tmp)
 
   gg <- gg + guides(fill=guide_legend(override.aes=list(colour=NA)))
 
@@ -216,7 +225,8 @@ if (i!=128)
   gg <- gg + theme(legend.position="bottom")
 
   #gg
-  filename <- paste("out/", indicator.id,".png",sep="")
+  filename <- paste("eae/", indicator.id,".png",sep="")
+  print(filename)
 
   ggsave(filename, gg, dpi=600)
 }
