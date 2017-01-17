@@ -8,14 +8,6 @@ library(stringi)  # string manipulation
 library(stringr)  # string manipulation
 library(ggplot2)  # plotting
 library(ggthemes) # theme_map
-#sometimes "fortify" is not working,
-# library(gpclib)
-# so I had to either install install.packages("gpclib", type = "source")
-# or call again library(maptools)
-#gpclibPermitStatus() #checks
-#gpclibPermit() #checks
-#gpclibPermitStatus() #checks
-
 
 ## Parameters
 
@@ -275,3 +267,37 @@ if (i!=128)
   ggsave(filename, gg, dpi=600)
 }
 }
+
+
+# Export to a csv file
+#
+# udalmap.df <- udalmap[[1]] %>%
+#   as.data.frame() %>%
+#   mutate(indid= strsplit(names(udalmap)[[i]],":")[[1]][1]) %>%
+#   mutate(indname= strsplit(names(udalmap)[[i]],":")[[1]][2])
+#
+# for (i in 1:length(udalmap))
+# {
+# if (i!=128)
+# {
+#   indicator.id <- strsplit(names(udalmap)[[i]],":")[[1]][1]
+#   indicator.name <- strsplit(names(udalmap)[[i]],":")[[1]][2]
+#
+#   print(paste(i,indicator.id))
+#   print(indicator.name)
+#
+#   udalmap.df <- udalmap[[i]] %>%
+#     as.data.frame() %>%
+#     mutate(indid= strsplit(names(udalmap)[[i]],":")[[1]][1]) %>%
+#     mutate(indname= strsplit(names(udalmap)[[i]],":")[[1]][2]) %>%
+#     bind_rows(udalmap.df)
+# }
+# }
+#
+# udalmap.df  <- udalmap.df[,c("indid","name","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","indname")]
+#
+# udalm2 <- udalm2 %>%
+#   mutate(indname_es=indname) %>%
+#   select(-indname)
+#
+# write.csv(udalm3,"udalmap2016.csv",row.names=F)
