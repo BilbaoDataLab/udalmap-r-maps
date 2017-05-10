@@ -11,17 +11,17 @@ library(ggthemes) # theme_map
 
 ## Parameters
 
-adierazleak <- read.csv("data/adierazleak.csv")
+adierazleak <- read.csv("../data/adierazleak.csv")
 adids <- adierazleak[,1]
 
-eskualdeak.dat <- read.csv("data/eskualdeka/1.csv") %>%
+eskualdeak.dat <- read.csv("../data/eskualdeka/1.csv") %>%
   mutate(adierazlea = as.character(adierazleak[1,2]))
 
 for (adid in adids)
-{ if (file.exists(paste0("data/eskualdeka/",adid,".csv")))
+{ if (file.exists(paste0("../data/eskualdeka/",adid,".csv")))
   { print(paste(adid, adierazleak[adierazleak$id==adid,2]))
 
-  eskualdeak.dat <- read.csv(paste0("data/eskualdeka/",adid,".csv")) %>%
+  eskualdeak.dat <- read.csv(paste0("../data/eskualdeka/",adid,".csv")) %>%
     #as.data.frame() %>%
     mutate(adierazlea = as.character(adierazleak[adierazleak$id==adid,2] )) %>%
     bind_rows(eskualdeak.dat)
@@ -29,16 +29,16 @@ for (adid in adids)
 }
 
 ## Download shape file and unzip from Euskalgeo
-if (!file.exists("data/shp/eskualdeak/Eskualdeak.shp"))
+if (!file.exists("../data/shp/eskualdeak/Eskualdeak.shp"))
 { eskualdeak.url <- "http://euskalgeo.net/sites/euskalgeo.net/files/fitxategi-eranskin/Eskualdeak_0.zip"
   if (!dir.exists("data/shp"))
-    dir.create("data/shp")
-  download.file(eskualdeak.url, "data/shp/eskualdeak.zip")
-  unzip("data/shp/eskualdeak.zip", exdir="data/shp/eskualdeak")
+    dir.create("../data/shp")
+  download.file(eskualdeak.url, "../data/shp/eskualdeak.zip")
+  unzip("../data/shp/eskualdeak.zip", exdir="../data/shp/eskualdeak")
 }
 
-eskualdeak.shp <- readOGR("data/shp/eskualdeak/Eskualdeak.shp")
-udalerriak.shp <- readOGR("data/shp/udalerriak/udalerriak.shp")
+eskualdeak.shp <- readOGR("../data/shp/eskualdeak/Eskualdeak.shp")
+udalerriak.shp <- readOGR("../data/shp/udalerriak/udalerriak.shp")
 
 ## Change encoding from Windows-1252 to UTF-8
 for ( i in 1:ncol(eskualdeak.shp@data))
@@ -54,12 +54,10 @@ for (i in 1:nrow(eskualdeak.shp@data))
   if (sum(grepl(eskualdeak.shp$es_iz_e_2[i], eskualdeak.dat$Lurralde)))
   eskualdeak.dat[grepl(eskualdeak.shp$es_iz_e_2[i], eskualdeak.dat$Lurralde),]$Eskualde.kodea <- eskualdeak.shp$es_kod_2[i]
 
- eskualdeak.dat[is.na(eskualdeak.dat$Eskualde.kodea),]$Lurralde
 eskualdeak.dat[grepl("Markina-Ondarroa", eskualdeak.dat$Lurralde),]$Eskualde.kodea <- "E33" # Lea Artibai
 eskualdeak.dat[grepl("Arratia Nerbioi", eskualdeak.dat$Lurralde),]$Eskualde.kodea <- "E07" # Arrati Nerbioi
 eskualdeak.dat[grepl("Deba Beherea", eskualdeak.dat$Lurralde),]$Eskualde.kodea <- "E13" # Debabarrena
 
-#eskualdeak_eae <- unique(as.character(udalmap$name))
 eskualdeak_eae.shp <- eskualdeak.shp[eskualdeak.shp$es_kod_2 %in% eskualdeak.dat$Eskualde.kodea,]
 rownames(eskualdeak_eae.shp@data) <- eskualdeak_eae.shp$es_iz_e_2
 eskualdeak_eae.shp$id <- eskualdeak_eae.shp$es_kod_2
@@ -78,8 +76,8 @@ sprintf("%2.1f-%s", per_scale_breaks, percent(lead(per_scale_breaks/100))) %>%
 # Colour pallet
 colour_pal <- c("#eaecd8", "#d6dab3", "#c2c98b", "#949D48", "#6e7537", "#494E24", "#BB792A", "#7C441C")
 
-if (!dir.exists("out/eskualdeka"))
-  dir.create("out/eskualdeka")
+if (!dir.exists("../out/eskualdeka"))
+  dir.create("../out/eskualdeka")
 
 indicators <- unique(eskualdeak.dat$adierazlea)
 
@@ -241,7 +239,7 @@ for (indicator in indicators)
   gg <- gg + theme(legend.justification="center")
 
   #gg
-  filename <- paste("out/eskualdeka/", indicator.id,".png",sep="")
+  filename <- paste("../out/eskualdeka/", indicator.id,".png",sep="")
   print(filename)
 
   ggsave(filename, gg, dpi=600)

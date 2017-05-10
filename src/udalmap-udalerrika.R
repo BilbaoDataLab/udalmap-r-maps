@@ -11,31 +11,30 @@ library(ggthemes) # theme_map
 
 ## Parameters
 
-adierazleak <- read.csv("data/adierazleak.csv")
+adierazleak <- read.csv("../data/adierazleak.csv")
 adids <- adierazleak[,1]
 
-udalerriak.dat <- read.csv("data/udalerrika/1.csv") %>%
+udalerriak.dat <- read.csv("../data/udalerrika/1.csv") %>%
   mutate(adierazlea = as.character(adierazleak[1,2]))
 
 for (adid in adids)
 { print(paste(adid, adierazleak[adierazleak$id==adid,2]))
 
-  udalerriak.dat <- read.csv(paste0("data/udalerrika/",adid,".csv")) %>%
-    #as.data.frame() %>%
+  udalerriak.dat <- read.csv(paste0("../data/udalerrika/",adid,".csv")) %>%
     mutate(adierazlea = as.character(adierazleak[adierazleak$id==adid,2] )) %>%
     bind_rows(udalerriak.dat)
 }
 
 ## Download shape file and unzip from Euskalgeo
-if (!file.exists("data/shp/udalerriak/udalerriak.shp"))
+if (!file.exists("../data/shp/udalerriak/udalerriak.shp"))
 { udalerriak.url <- "http://www.euskalgeo.net/sites/euskalgeo.net/files/fitxategi-eranskin/udalerriak_0.zip"
-  if (!dir.exists("data/shp"))
-    dir.create("data/shp")
-  download.file(udalerriak.url, "data/shp/udalerriak.zip")
-  unzip("data/shp/udalerriak.zip", exdir="data/shp/udalerriak")
+  if (!dir.exists("../data/shp"))
+    dir.create("../data/shp")
+  download.file(udalerriak.url, "../data/shp/udalerriak.zip")
+  unzip("../data/shp/udalerriak.zip", exdir="../data/shp/udalerriak")
 }
 
-udalerriak.shp <- readOGR("data/shp/udalerriak/udalerriak.shp")
+udalerriak.shp <- readOGR("../data/shp/udalerriak/udalerriak.shp")
 
 ## Change encoding from Windows-1252 to UTF-8
 for ( i in 1:ncol(udalerriak.shp@data))
@@ -46,7 +45,6 @@ for (i in 1:nrow(udalerriak.dat))
   if (nchar(udalerriak.dat[i,1])==4)
     udalerriak.dat[i,1] <- paste0("0",udalerriak.dat[i,1])
 
-#udalerriak_eae <- unique(as.character(udalmap$name))
 udalerriak_eae.shp <- udalerriak.shp[udalerriak.shp$ud_kodea %in% udalerriak.dat$Udalerri.kodea,]
 rownames(udalerriak_eae.shp@data) <- udalerriak_eae.shp$iz_ofizial
 udalerriak_eae.shp$id <- udalerriak_eae.shp$ud_kodea
@@ -65,8 +63,8 @@ sprintf("%2.1f-%s", per_scale_breaks, percent(lead(per_scale_breaks/100))) %>%
 # Colour pallet
 colour_pal <- c("#eaecd8", "#d6dab3", "#c2c98b", "#949D48", "#6e7537", "#494E24", "#BB792A", "#7C441C")
 
-if (!dir.exists("out/udalerrika"))
-  dir.create("out/udalerrika")
+if (!dir.exists("../out/udalerrika"))
+  dir.create("../out/udalerrika")
 
 indicators <- unique(udalerriak.dat$adierazlea)
 
@@ -229,7 +227,7 @@ for (indicator in indicators)
   gg <- gg + theme(legend.justification="center")
 
   #gg
-  filename <- paste("out/udalerrika/", indicator.id,".png",sep="")
+  filename <- paste("../out/udalerrika/", indicator.id,".png",sep="")
   print(filename)
 
   ggsave(filename, gg, dpi=600)
