@@ -84,17 +84,22 @@ indicators <- unique(eskualdeak.dat$adierazlea)
 for (indicator in indicators)
 { ## Plot each indicators colour map (by years) to out dir
 
-  df <- eskualdeak.dat %>%
-    filter(adierazlea==indicator)
-
-
-
   ## Get indicator id and name
   indicator.id <- adierazleak %>% filter(izena==indicator) %>% select(id) %>% as.numeric()
   indicator.name <- str_trim(strsplit(indicator,"\\(")[[1]][1])
   indicator.subname <- ifelse(!is.na(strsplit(indicator,"\\(")[[1]][2]), str_trim(paste0("(",strsplit(indicator,"\\(")[[1]][2])),"")
 
   print(indicator.name)
+
+#
+if ( !(grepl(indicator.name,"Uraren industri eskaria. biztanleko eta eguneko (l/bizt/egunak)") ||
+      grepl(indicator.name,"Erreferentziako ospitalerako joan-etorrien batez besteko denbora") ||
+      grepl(indicator.name,"Gizarte Zerbitzuetan egindako gastu osoa biztanle bakoitzeko")
+    ))
+{
+
+  df <- eskualdeak.dat %>%
+    filter(adierazlea==indicator)
 
   if ( grepl("%", indicator) | grepl("‰", indicator))
   {
@@ -239,8 +244,9 @@ for (indicator in indicators)
   gg <- gg + theme(legend.justification="center")
 
   #gg
-  filename <- paste("../out/eskualdeka/", indicator.id,".png",sep="")
+  filename <- paste("../out/eskualdeka/eskualdeka-", indicator.id,".png",sep="")
   print(filename)
 
   ggsave(filename, gg, dpi=600)
+}
 }

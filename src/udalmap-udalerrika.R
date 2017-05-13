@@ -227,7 +227,7 @@ for (indicator in indicators)
   gg <- gg + theme(legend.justification="center")
 
   #gg
-  filename <- paste("../out/udalerrika/", indicator.id,".png",sep="")
+  filename <- paste("../out/udalerrika/udalerrika-", indicator.id,".png",sep="")
   print(filename)
 
   ggsave(filename, gg, dpi=600)
