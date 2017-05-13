@@ -29,11 +29,6 @@ In the *udalmap* folder you will find the whole process split up in different fi
 Output Example
 --------------
 
-![alt text](out/E.1.1.1_eus.png)
+![alt text](out/udalerrika-1.png)
 
 In the *out* folder you will find this example indicator in Basque, Spanish and English.
-
-Common Problems
----------------
-
-We have had some problems downloading large size data from udalmap. If you are experiencing these errors you may need to wait 24h to try it again.
