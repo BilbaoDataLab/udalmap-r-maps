@@ -32,7 +32,7 @@ for (adid in adids)
 if (!file.exists("../data/shp/eskualdeak/Eskualdeak.shp"))
 { eskualdeak.url <- "http://euskalgeo.net/sites/euskalgeo.net/files/fitxategi-eranskin/Eskualdeak_0.zip"
   if (!dir.exists("data/shp"))
-    dir.create("../data/shp")
+    dir.create("../data/shp",recursive=T)
   download.file(eskualdeak.url, "../data/shp/eskualdeak.zip")
   unzip("../data/shp/eskualdeak.zip", exdir="../data/shp/eskualdeak")
 }
@@ -76,7 +76,7 @@ sprintf("%2.1f-%s", per_scale_breaks, percent(lead(per_scale_breaks/100))) %>%
 colour_pal <- c("#eaecd8", "#d6dab3", "#c2c98b", "#949D48", "#6e7537", "#494E24", "#BB792A", "#7C441C")
 
 if (!dir.exists("../out/eskualdeka"))
-  dir.create("../out/eskualdeka")
+  dir.create("../out/eskualdeka",recursive=T)
 
 indicators <- unique(eskualdeak.dat$adierazlea)
 

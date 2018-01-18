@@ -29,7 +29,7 @@ for (adid in adids)
 if (!file.exists("../data/shp/udalerriak/udalerriak.shp"))
 { udalerriak.url <- "http://www.euskalgeo.net/sites/euskalgeo.net/files/fitxategi-eranskin/udalerriak.zip"
   if (!dir.exists("../data/shp"))
-    dir.create("../data/shp")
+    dir.create("../data/shp",recursive=T)
   download.file(udalerriak.url, "../data/shp/udalerriak.zip")
   unzip("../data/shp/udalerriak.zip", exdir="../data/shp/udalerriak")
 }
@@ -64,7 +64,7 @@ sprintf("%2.1f-%s", per_scale_breaks, percent(lead(per_scale_breaks/100))) %>%
 colour_pal <- c("#eaecd8", "#d6dab3", "#c2c98b", "#949D48", "#6e7537", "#494E24", "#BB792A", "#7C441C")
 
 if (!dir.exists("../out/udalerrika"))
-  dir.create("../out/udalerrika")
+  dir.create("../out/udalerrika",recursive=T)
 
 indicators <- unique(udalerriak.dat$adierazlea)
 
