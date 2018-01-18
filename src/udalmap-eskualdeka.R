@@ -38,7 +38,6 @@ if (!file.exists("../data/shp/eskualdeak/Eskualdeak.shp"))
 }
 
 eskualdeak.shp <- readOGR("../data/shp/eskualdeak/Eskualdeak.shp")
-udalerriak.shp <- readOGR("../data/shp/udalerriak/udalerriak.shp")
 
 ## Change encoding from Windows-1252 to UTF-8
 for ( i in 1:ncol(eskualdeak.shp@data))

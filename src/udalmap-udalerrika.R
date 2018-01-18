@@ -27,7 +27,7 @@ for (adid in adids)
 
 ## Download shape file and unzip from Euskalgeo
 if (!file.exists("../data/shp/udalerriak/udalerriak.shp"))
-{ udalerriak.url <- "http://www.euskalgeo.net/sites/euskalgeo.net/files/fitxategi-eranskin/udalerriak_0.zip"
+{ udalerriak.url <- "http://www.euskalgeo.net/sites/euskalgeo.net/files/fitxategi-eranskin/udalerriak.zip"
   if (!dir.exists("../data/shp"))
     dir.create("../data/shp")
   download.file(udalerriak.url, "../data/shp/udalerriak.zip")
